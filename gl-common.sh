@@ -60,7 +60,12 @@ CLEAR_BEFORE=$'\033[1K';    CLEAR_ALL=$'\033[2K';
 TAB=$'\t';                  LF=$'\n'
 
 # Spinner chars used
-GL_COMMON_BASH_SPINNER_CHARS='|/-\'
+GL_COMMON_BASH_SPINNER_CHARS[0]='|/─\'
+GL_COMMON_BASH_SPINNER_CHARS[1]='╵╶╷╴'
+GL_COMMON_BASH_SPINNER_CHARS[2]='╀┾╁┽'
+GL_COMMON_BASH_SPINNER_CHARS[3]='┤┘┴└├┌┬┐'
+GL_COMMON_BASH_SPINNER_CHARS[4]="░▒▓█▓▒ "
+GL_COMMON_BASH_SPINNER_CHARS[5]="▄▀"
 
 
 
@@ -110,21 +115,22 @@ remove_color() {
 
 # Make a spinner at the beginning of the standard output line
 spinner() {
-    local command="$1" before="$2" after="$3" index=0 pid
+    local command="$1" before="$2" after="$3" mode="$4" index=0 pid
+    [[ -z "${mode}" ]] && mode="$(($RANDOM % ${#GL_COMMON_BASH_SPINNER_CHARS[@]}))"
     ${command} &
     pid="$!"
     while ps -p"${pid}" -o "pid=" >/dev/null 2>&1; do
-        let index++
-        [[ "${index}" -ge "${#GL_COMMON_BASH_SPINNER_CHARS}" ]] && index=0
-        echo -en "\r$(eval "${before}")${GL_COMMON_BASH_SPINNER_CHARS:${index}:1}$(eval "${after}")"
+        [[ "${index}" -ge "${#GL_COMMON_BASH_SPINNER_CHARS[${mode}]}" ]] && index=0
+        echo -en "\r$(eval "${before}")${GL_COMMON_BASH_SPINNER_CHARS[${mode}]:${index}:1}$(eval "${after}")"
         sleep 0.25
+        let index++
     done
     echo -ne "${CLEAR_ALL}\r"
 }
 
 # Make a spinner at the beginning of the standard output line, in green
 spinner_green() {
-    spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3"
+    spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3" "$4"
 }
 
 # Convenience functions for checking shFlags flags

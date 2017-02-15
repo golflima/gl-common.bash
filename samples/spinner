@@ -20,5 +20,5 @@ if [[ $? > 0 ]]; then echo "Error when loading file '../gl-common.sh'"; exit 1; 
 
 info "Press [Ctrl+C] to exit."
 
-spinner_green 'sleep 5'
-spinner_green 'sleep 5' '' 'echo -n " Running pid: $pid ($index)"'
+spinner_green 'sleep 1'
+spinner_green 'sleep 5' '' 'echo -n " Running pid: $pid (index: $index) (mode: $mode) "' "$1"
