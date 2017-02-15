@@ -33,8 +33,10 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX="$1"
 # Version
 GL_COMMON_BASH_VERSION="0.1.0+161121.2222"
 
-# Colors
+# Special chars
+# No color
 NC=$'\033[0m'
+# Foreground colors
 BLACK=$'\033[0;30m';        DARK_GRAY=$'\033[1;30m'
 RED=$'\033[0;31m';          LIGHT_RED=$'\033[1;31m'
 GREEN=$'\033[0;32m';        LIGHT_GREEN=$'\033[1;32m'
@@ -43,21 +45,37 @@ BLUE=$'\033[0;34m';         LIGHT_BLUE=$'\033[1;34m'
 PURPLE=$'\033[0;35m';       LIGHT_PURPLE=$'\033[1;35m'
 CYAN=$'\033[0;36m';         LIGHT_CYAN=$'\033[1;36m'
 LIGHT_GRAY=$'\033[0;37m';   WHITE=$'\033[1;37m'
-
-# Special chars, for old version of 'sed' (Mac OS X ...)
+# Background colors
+BG_BLACK=$'\033[40m';
+BG_RED=$'\033[41m';
+BG_GREEN=$'\033[42m';
+BG_BROWN=$'\033[43m';
+BG_BLUE=$'\033[44m';
+BG_PURPLE=$'\033[45m';
+BG_CYAN=$'\033[46m';
+BG_LIGHT_GRAY=$'\033[47m';
+# Controls
+CLEAR_BEFORE=$'\033[1K';    CLEAR_ALL=$'\033[2K';
+# Fix for old sed versions (Mac OS...)
 TAB=$'\t';                  LF=$'\n'
+
+# Spinner chars used
+GL_COMMON_BASH_SPINNER_CHARS='|/-\'
 
 
 
 ############## General functions ##############
 
+# Gets the content of a prefixed VAR
 gl_common_get_var() {
     echo -n "${$(echo -n "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}_$1")}"
 }
 
 # Displays trace information message $@ in dark gray
 trace() { echo -e "${DARK_GRAY}$@${NC}"; }
-debug() { has_flag "debug" && trace "$1"; }
+trace_var() { echo -e "${DARK_GRAY}$1\t = $(eval "echo \${$1}")${NC}"; }
+debug() { has_flag "debug" && trace "$@"; }
+debug_var() { has_flag "debug" && debug_var "$@"; }
 
 # Displays information message $@ in light blue
 info() { echo -e "${LIGHT_BLUE}$@${NC}"; }
@@ -78,7 +96,7 @@ end() { [[ -z "$@" ]] && echo -e "${GREEN}Done.${NC}" || echo -e "${GREEN}$@${NC
 question() { echo -en "${LIGHT_PURPLE}$@${NC}"; }
 
 # Ends the execution if given argument $1 is empty and displays usage of subcommand $2, or global usage if $2 is empty
-require_argument() { [[ -z "$(eval "echo \$$1")" ]] && usage $2 && echo && die "Missing <$1> argument !"; }
+require_argument() { [[ -z "$(eval "echo \${$1}")" ]] && usage $2 && echo && die "Missing <$1> argument !"; }
 
 # Ends the execution if given command $1 returns an error and displays debug information. Usage: 'assertok "command" $LINENO'
 assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
@@ -88,6 +106,25 @@ remove_color() {
     NC=; BLACK=; DARK_GRAY=; RED=; LIGHT_RED=; GREEN=; LIGHT_GREEN=;
     BROWN=; YELLOW=; BLUE=; LIGHT_BLUE=; PURPLE=; LIGHT_PURPLE=;
     CYAN=; LIGHT_CYAN=; LIGHT_GRAY=; WHITE=;
+}
+
+# Make a spinner at the beginning of the standard output line
+spinner() {
+    local command="$1" before="$2" after="$3" index=0 pid
+    ${command} &
+    pid="$!"
+    while ps -p"${pid}" -o "pid=" >/dev/null 2>&1; do
+        let index++
+        [[ "${index}" -ge "${#GL_COMMON_BASH_SPINNER_CHARS}" ]] && index=0
+        echo -en "\r$(eval "${before}")${GL_COMMON_BASH_SPINNER_CHARS:${index}:1}$(eval "${after}")"
+        sleep 0.25
+    done
+    echo -ne "${CLEAR_ALL}\r"
+}
+
+# Make a spinner at the beginning of the standard output line, in green
+spinner_green() {
+    spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3"
 }
 
 # Convenience functions for checking shFlags flags

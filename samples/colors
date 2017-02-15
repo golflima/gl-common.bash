@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Sample for gl-common.bash
+#
+# CC0 - Public Domain, jeremy.walther@golflima.net
+# To the extent possible under law, Jérémy Walther has waived
+# all copyright and related or neighboring rights to this file.
+# This work is published from: France.
+# See: <https://creativecommons.org/publicdomain/zero/1.0/deed>
+#
+# Feel free to use it as you want.
+#
+# This sample is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# Load gl-common.bash
+. ../gl-common.sh SAMPLE_SPINNER
+if [[ $? > 0 ]]; then echo "Error when loading file '../gl-common.sh'"; exit 1; fi
+
+test_color() {
+    echo -e "$(eval "echo \${$1}")$1${NC}"
+}
+
+test_color BLACK
+test_color RED
+test_color GREEN
+test_color BROWN
+test_color BLUE
+test_color PURPLE
+test_color CYAN
+test_color LIGHT_GRAY
+
+test_color DARK_GRAY
+test_color LIGHT_RED
+test_color LIGHT_GREEN
+test_color YELLOW
+test_color LIGHT_BLUE
+test_color LIGHT_PURPLE
+test_color LIGHT_CYAN
+test_color WHITE
+
+test_color BG_BLACK
+test_color BG_RED
+test_color BG_GREEN
+test_color BG_BROWN
+test_color BG_BLUE
+test_color BG_PURPLE
+test_color BG_CYAN
+test_color BG_LIGHT_GRAY
