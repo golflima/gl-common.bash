@@ -5,7 +5,7 @@
 # Feel free to contribute to this project at:
 #    https://github.com/golflima/gl-common.bash
 #
-# Copyright 2016 Jérémy Walther (jeremy.walther@golflima.net).
+# Copyright 2016-2017 Jérémy Walther (jeremy.walther@golflima.net).
 #
 # This file is part of gl-common.bash
 #
@@ -31,7 +31,7 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX="$1"
 ############## Constants ##############
 
 # Version
-GL_COMMON_BASH_VERSION="0.1.0+161121.2222"
+GL_COMMON_BASH_VERSION="0.2.0+170217"
 
 # Special chars
 # No color
