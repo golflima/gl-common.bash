@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Sample for gl-common.bash
+#
+# CC0 - Public Domain, jeremy.walther@golflima.net
+# To the extent possible under law, Jérémy Walther has waived
+# all copyright and related or neighboring rights to this file.
+# This work is published from: France.
+# See: <https://creativecommons.org/publicdomain/zero/1.0/deed>
+#
+# Feel free to use it as you want.
+#
+# This sample is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# Load gl-common.bash
+. ../gl-common.sh SAMPLE_SPINNER
+if [[ $? > 0 ]]; then echo "Error when loading file '../gl-common.sh'"; exit 1; fi
+
+trace "a trace"
+info "an info"
+question "a question, "
+question "enter a text: " TEXT
+info "your text was: $TEXT"
+question "enter a text: " TEXT "there is a default value this time !"
+info "your text was: $TEXT"

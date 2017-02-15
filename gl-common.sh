@@ -98,7 +98,13 @@ die() { warn "${LIGHT_RED}$@"; exit 1; }
 end() { [[ -z "$@" ]] && echo -e "${GREEN}Done.${NC}" || echo -e "${GREEN}$@${NC}"; exit 0; }
 
 # Displays question message $@ in light purple
-question() { echo -en "${LIGHT_PURPLE}$@${NC}"; }
+question() {
+    case $# in
+        1)  echo -en "${LIGHT_PURPLE}$@${NC}" ;;
+        2)  read -p "${LIGHT_PURPLE}$1${NC}" $2 < /dev/tty ;;
+        3)  read -p "${LIGHT_PURPLE}$1${NC}" -ei "$3" $2 < /dev/tty ;;
+    esac
+}
 
 # Ends the execution if given argument $1 is empty and displays usage of subcommand $2, or global usage if $2 is empty
 require_argument() { [[ -z "$(eval "echo \${$1}")" ]] && usage $2 && echo && die "Missing <$1> argument !"; }
