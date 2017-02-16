@@ -167,7 +167,7 @@ require_script_file() {
 #   require_script_curl <file>
 #   require_script_curl <file> <arguments>
 require_script_curl() {
-    local http_code="$(check_http_code "$1")"
+    local http_code="$(curl_http_code "$1")"
     [[ "${http_code}" != "200" ]] && die "Error when loading url '$1', http_code: ${http_code}."
     eval "$(curl -sL "$1")"
     local error_code=$?
@@ -316,8 +316,8 @@ spinner_green() {
 }
 
 # Returns the HTTP code for given url, usage:
-#   check_http_code <url>
-check_http_code(){
+#   curl_http_code <url>
+curl_http_code(){
     curl -s -o /dev/null -w '%{http_code}' "$1"
 }
 
