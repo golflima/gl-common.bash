@@ -31,7 +31,7 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX="$1"
 ############## Constants ##############
 
 # Version
-GL_COMMON_BASH_VERSION="0.2.0+170217"
+GL_COMMON_BASH_VERSION='0.2.0+170217';
 
 # Special chars
 # No color
@@ -57,26 +57,32 @@ BG_LIGHT_GRAY=$'\033[47m';
 # Controls
 CLEAR_BEFORE=$'\033[1K';    CLEAR_ALL=$'\033[2K';
 # Fix for old sed versions (Mac OS...)
-TAB=$'\t';                  LF=$'\n'
+TAB=$'\t';                  LF=$'\n';
 
 # Spinner chars used
-GL_COMMON_BASH_SPINNER_CHARS[0]='|/─\'
-GL_COMMON_BASH_SPINNER_CHARS[1]='╵╶╷╴'
-GL_COMMON_BASH_SPINNER_CHARS[2]='╀┾╁┽'
-GL_COMMON_BASH_SPINNER_CHARS[3]='┤┘┴└├┌┬┐'
-GL_COMMON_BASH_SPINNER_CHARS[4]="░▒▓█▓▒ "
-GL_COMMON_BASH_SPINNER_CHARS[5]="▄▀"
+GL_COMMON_BASH_SPINNER_CHARS[0]='|/─\';
+GL_COMMON_BASH_SPINNER_CHARS[1]='╵╶╷╴';
+GL_COMMON_BASH_SPINNER_CHARS[2]='╀┾╁┽';
+GL_COMMON_BASH_SPINNER_CHARS[3]='┤┘┴└├┌┬┐';
+GL_COMMON_BASH_SPINNER_CHARS[4]='░▒▓█▓▒ ';
+GL_COMMON_BASH_SPINNER_CHARS[5]='▄▀';
+
+# shFlags
+[[ -z "${FLAGS_TRUE}" ]] && FLAGS_TRUE=0;
+[[ -z "${FLAGS_FALSE}" ]] && FLAGS_FALSE=1;
 
 
 
 ############## General functions ##############
 
-# Gets the content of a prefixed VAR
+# Gets the content of a prefixed VAR, usage:
+#   gl_common_get_var <var>
 gl_common_get_var() {
     echo -n "${$(echo -n "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}_$1")}"
 }
 
-# Displays trace information message $@ in dark gray
+# Displays trace information message $@ in dark gray, usage:
+#   trace <text>
 trace() { echo -e "${DARK_GRAY}$@${NC}"; }
 trace_var() { echo -e "${DARK_GRAY}$1\t = $(eval "echo \${$1}")${NC}"; }
 debug() { has_flag "debug" && trace "$@"; }
@@ -97,7 +103,10 @@ die() { warn "${LIGHT_RED}$@"; exit 1; }
 # Ends the execution, and displays a last message ($@ if set, 'Done.' otherwise)
 end() { [[ -z "$@" ]] && echo -e "${GREEN}Done.${NC}" || echo -e "${GREEN}$@${NC}"; exit 0; }
 
-# Displays question message $@ in light purple
+# Displays question message $1 in light purple, usage:
+#   question <text>
+#   question <text> <output_variable>
+#   question <text> <output_variable> <default_value>
 question() {
     case $# in
         1)  echo -en "${LIGHT_PURPLE}$@${NC}" ;;
@@ -106,13 +115,19 @@ question() {
     esac
 }
 
+# Asks user to enter a sensible data in light purple, usage:
+#   password <text> <output_variable>
+password() {
+    read -sp "${LIGHT_PURPLE}$1${NC}" $2 < /dev/tty
+}
+
 # Ends the execution if given argument $1 is empty and displays usage of subcommand $2, or global usage if $2 is empty
 require_argument() { [[ -z "$(eval "echo \${$1}")" ]] && usage $2 && echo && die "Missing <$1> argument !"; }
 
 # Ends the execution if given command $1 returns an error and displays debug information. Usage: 'assertok "command" $LINENO'
 assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
 
-# Remove all colors, should be called when option --no-color (-c) is used
+# Removes all colors, should be called when option --no-color (-c) is used
 remove_color() {
     NC=; BLACK=; DARK_GRAY=; RED=; LIGHT_RED=; GREEN=; LIGHT_GREEN=;
     BROWN=; YELLOW=; BLUE=; LIGHT_BLUE=; PURPLE=; LIGHT_PURPLE=;
@@ -120,10 +135,62 @@ remove_color() {
     BG_GREEN=; BG_BROWN=; BG_BLUE=; BG_PURPLE=; BG_CYAN=; BG_LIGHT_GRAY=;
 }
 
-# Make a spinner at the beginning of the standard output line
+# Checks if an option is present, usage:
+#   has_option <o> $@
+#   has_option <option> $@
+#   has_option <o/option> $@
+has_option() {
+    local option="$1"
+    while [[ $# > 1 ]]; do
+        shift
+        check_option "${option}" "$1" && return 0;
+    done
+    return 1;
+}
+
+# Gets value on an option, usage:
+#   get_option <o> $@
+#   get_option <option> $@
+#   get_option <o/option> $@
+get_option() {
+    local option="$1"
+    while [[ $# > 1 ]]; do
+        shift
+        if check_option "${option}" "$1"; then
+            echo -n "$2"
+            return 0;
+        fi
+    done
+    return 1;
+}
+
+# Compares an option to an argument, usage:
+#   check_option <o> <argument>
+#   check_option <option> <argument>
+#   check_option <o/option> <argument>
+check_option() {
+    [[ $# != 2 ]] && die "Wrong usage of check_option(), requires at least 2 arguments : $@"
+    if [[ ${#1} = 1 ]]; then
+        [[ "-$1" = "$2" ]] && return 0 || return 1
+    fi
+    [[ ${#1} < 2 ]] && die "Wrong usage of check_option(), long options must be at least 2 chars : $@"
+    if [[ ${1:1:1} != '/' ]]; then
+        [[ "--$1" = "$2" ]] && return 0 || return 1
+    fi
+    [[ ${#1} < 3 ]] && die "Wrong usage of check_option(), combined options must be at least 3 chars : $@"
+    [[ "-${1:0:1}" = "$2" ]] && return 0
+    [[ "--${1:2}" = "$2" ]] && return 0
+    return 1;
+}
+
+# Make a spinner at the beginning of the standard output line, usage:
+#   spinner <command>
+#   spinner <command> <before>
+#   spinner <command> <before> <after>
+#   spinner <command> <before> <after> <mode>
 spinner() {
     local command="$1" before="$2" after="$3" mode="$4" index=0 pid
-    [[ -z "${mode}" ]] && mode="$(($RANDOM % ${#GL_COMMON_BASH_SPINNER_CHARS[@]}))"
+    [[ -z "${mode}" ]] && mode="$((${RANDOM} % ${#GL_COMMON_BASH_SPINNER_CHARS[@]}))"
     ${command} &
     pid="$!"
     while ps -p"${pid}" -o "pid=" >/dev/null 2>&1; do
@@ -135,7 +202,11 @@ spinner() {
     echo -ne "${CLEAR_ALL}\r"
 }
 
-# Make a spinner at the beginning of the standard output line, in green
+# Make a spinner at the beginning of the standard output line, in green, usage:
+#   spinner_green <command>
+#   spinner_green <command> <before>
+#   spinner_green <command> <before> <after>
+#   spinner_green <command> <before> <after> <mode>
 spinner_green() {
     spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3" "$4"
 }
@@ -146,6 +217,9 @@ set_flag() { local flag; flag="FLAGS_$1"; eval "\${${flag}}=\"$2\""; }
 empty_flag() { [[ -z "$(get_flag "$1")" ]]; }
 has_flag() { [[ "$(get_flag "$1")" = "${FLAGS_TRUE}" ]]; }
 hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
+
+# Disable flags_help() function of shFlags
+flags_help() { return 0; }
 
 # Escape git branch names for use in file names
 file_escape() { echo "${1//[^[:alnum:]._-]/-}"; }
@@ -242,9 +316,6 @@ parse_template() {
     fi
     return 0;
 }
-
-# Disable flags_help() function of shFlags
-flags_help() { return 0; }
 
 # Colorize a given markdown text
 colorize_markdown() {
