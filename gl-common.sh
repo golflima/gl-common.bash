@@ -152,6 +152,17 @@ require_script_file() {
     [[ "${error_code}" > 0 ]] && die "Error when loading file '$1', error_code: ${error_code}."
 }
 
+# Loads required script from URL and dies if it is not found or if there is an error, usage:
+#   require_script_curl <file>
+#   require_script_curl <file> <arguments>
+require_script_curl() {
+    local http_code="$(check_http_code "$1")"
+    [[ "${http_code}" != "200" ]] && die "Error when loading url '$1', http_code: ${http_code}."
+    eval "$(curl -sL "$1")"
+    local error_code=$?
+    [[ "${error_code}" > 0 ]] && die "Error when loading script from '$1', error_code: ${error_code}."
+}
+
 # Ends the execution if given command $1 returns an error and displays debug information, usage:
 #   assertok "command" $LINENO
 assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
@@ -289,6 +300,12 @@ spinner() {
 #   spinner_green <command> <before> <after> <mode>
 spinner_green() {
     spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3" "$4"
+}
+
+# Returns the HTTP code for given url, usage:
+#   check_http_code <url>
+check_http_code(){
+    curl -s -o /dev/null -w '%{http_code}' "$1"
 }
 
 # Escapes git branch names for use in file names, usage:
