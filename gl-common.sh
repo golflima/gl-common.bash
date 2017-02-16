@@ -199,8 +199,7 @@ check_option() {
         [[ "--$1" = "$2" ]] && return 0 || return 1
     fi
     [[ ${#1} < 3 ]] && die "Wrong usage of check_option(), combined options must be at least 3 chars : $@"
-    [[ "-${1:0:1}" = "$2" ]] && return 0
-    [[ "--${1:2}" = "$2" ]] && return 0
+    [[ "-${1:0:1}" = "$2" || "--${1:2}" = "$2" ]] && return 0
     return 1;
 }
 
@@ -230,6 +229,7 @@ hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
 flags_help() { return 0; }
 
 # Checks if a flag is set with shFlags, fallback to has_option otherwise and stores the result like shFlags does, usage:
+#   has_option_wf <f> "$@"
 #   has_option_wf <flag> "$@"
 has_option_wf() {
     has_flag $1 && return 0;
@@ -241,7 +241,8 @@ has_option_wf() {
 }
 
 # Gets content of a flag sets with shFlags, fallback to get_option if empty (or not set) and stores the result like shFlags does, usage:
-#   has_option_wf <flag> "$@"
+#   get_option_wf <f> "$@"
+#   get_option_wf <flag> "$@"
 get_option_wf() {
     local value
     value="$(get_flag $1)"
