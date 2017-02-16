@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Sample for gl-common.bash
+#
+# CC0 - Public Domain, jeremy.walther@golflima.net
+# To the extent possible under law, Jérémy Walther has waived
+# all copyright and related or neighboring rights to this file.
+# This work is published from: France.
+# See: <https://creativecommons.org/publicdomain/zero/1.0/deed>
+#
+# Feel free to use it as you want.
+#
+# This sample is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# Load gl-common.bash
+readonly SAMPLES_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g')")
+. "${SAMPLES_DIR}/../gl-common.sh" SAMPLES_
+if [[ $? > 0 ]]; then echo "Error when loading file '${SAMPLES_DIR}/../gl-common.sh'"; exit 1; fi
+
+# Declare help header
+SAMPLES_HELP_FILE="usage.md"
+SAMPLES_HELP_TITLE_PREFIX="test"
+
+
+usage
+usage foo
+usage foo bar
