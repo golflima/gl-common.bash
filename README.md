@@ -10,7 +10,7 @@ Key features:
 * Simplifies use of shFlags
 * Easy documentation of your scripts with Markdown
 
-And it has many free [samples](samples).
+And it has many free [examples](examples).
 
 
 
