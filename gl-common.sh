@@ -75,10 +75,23 @@ GL_COMMON_BASH_SPINNER_CHARS[5]='▄▀';
 
 ############## General functions ##############
 
+# Gets value of given variable name, usage:
+#   get_var <variable_name>
+get_var() { echo -n "$(eval "echo \${$1}")"; }
+
+# Sets value of given variable name, usage:
+#   set_var <variable_name> <value>
+set_var() { eval "$1=\"$2\""; }
+
 # Gets the content of a prefixed VAR, usage:
 #   gl_common_get_var <var>
-gl_common_get_var() {
-    echo -n "$(eval "echo \${${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1}")"
+gl_common_get_var() { get_var "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1"; }
+
+# Initializes a variable from a prefixed environment variable, usage:
+#   init_var <variable_name> <default_command> <env_prefix>
+init_var() {
+    local env_var="$(get_var "$3$1")"
+    [[ -z "${env_var}" ]] && set_var "$1" "eval \"$2\"" || set_var "$1" "${env_var}"
 }
 
 # Displays trace information message $@ in dark gray, usage:
@@ -133,9 +146,7 @@ question() {
 
 # Asks user to enter a sensible data in light purple, usage:
 #   password <text> <output_variable>
-password() {
-    read -sp "${LIGHT_PURPLE}$1${NC}" $2 < /dev/tty
-}
+password() { read -sp "${LIGHT_PURPLE}$1${NC}" $2 < /dev/tty; }
 
 # Ends the execution if given argument $1 is empty and displays usage of subcommand $2, or global usage if $2 is empty, usage:
 #   require_argument <variable_name>
@@ -228,11 +239,11 @@ check_option() {
 
 # Gets content of a flag, with shFlags, usage:
 #   get_flag <flag>
-get_flag() { echo -n "$(eval "echo -n \${FLAGS_$1}")"; }
+get_flag() { get_var "FLAGS_$1"; }
 
 # Sets content of a flag, with shFlags, usage:
 #   set_flag <flag> <value>
-set_flag() { eval "FLAGS_$1=\"$2\""; }
+set_flag() { set_var "FLAGS_$1" "$2"; }
 
 # Checks if a flag is empty (or not set), with shFlags, usage:
 #   empty_flag <flag>
