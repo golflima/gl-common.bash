@@ -438,7 +438,7 @@ colorize_markdown() {
 # Displays usage information, based on help file declared in variable HELP_FILE, usage:
 #   usage
 #   usage <command>
-#   usage <command> <subcomand>
+#   usage <command> <subcommand>
 usage() {
     local help_file="$(gl_common_get_var HELP_FILE)" help_title_prefix="$(gl_common_get_var HELP_TITLE_PREFIX)" help_content
     if [[ -n "${help_file}" ]]; then
