@@ -84,23 +84,39 @@ gl_common_get_var() {
 # Displays trace information message $@ in dark gray, usage:
 #   trace <text>
 trace() { echo -e "${DARK_GRAY}$@${NC}"; }
+
+# Displays variable content in dark gray, usage:
+#   trace_var <variable_name>
 trace_var() { echo -e "${DARK_GRAY}$1\t = $(eval "echo \${$1}")${NC}"; }
+
+# Displays debug information message $@ in dark gray, only if flag 'debug' is set, usage:
+#   debug <text>
 debug() { has_flag "debug" && trace "$@"; }
+
+# Displays variable content in dark gray, only if flag 'debug' is set, usage:
+#   debug_var <variable_name>
 debug_var() { has_flag "debug" && debug_var "$@"; }
 
-# Displays information message $@ in light blue
+# Displays information message $@ in light blue, usage:
+#   info <text>
 info() { echo -e "${LIGHT_BLUE}$@${NC}"; }
 
-# Displays success message $@ in green
+# Displays success message $@ in green, usage:
+#   success <text>
 success() { echo -e "${GREEN}$@${NC}"; }
 
-# Displays warning message $@ in brown/orange (overriden from gitflow-common)
+# Displays warning message $@ in brown/orange, usage:
+#   warn <text>
 warn() { echo -e "${BROWN}$@${NC}" >&2; }
 
-# Ends the execution, and displays $@ in bold red (overriden from gitflow-common)
+# Ends the execution, and displays $@ in bold red, usage:
+#   die
+#   die <text>
 die() { warn "${LIGHT_RED}$@"; exit 1; }
 
-# Ends the execution, and displays a last message ($@ if set, 'Done.' otherwise)
+# Ends the execution, and displays a last message ($@ if set, 'Done.' otherwise), usage:
+#   end
+#   end <text>
 end() { [[ -z "$@" ]] && echo -e "${GREEN}Done.${NC}" || echo -e "${GREEN}$@${NC}"; exit 0; }
 
 # Displays question message $1 in light purple, usage:
@@ -121,14 +137,19 @@ password() {
     read -sp "${LIGHT_PURPLE}$1${NC}" $2 < /dev/tty
 }
 
-# Ends the execution if given argument $1 is empty and displays usage of subcommand $2, or global usage if $2 is empty
+# Ends the execution if given argument $1 is empty and displays usage of subcommand $2, or global usage if $2 is empty, usage:
+#   require_argument <variable_name>
+#   require_argument <variable_name> <subcommand>
 require_argument() { [[ -z "$(eval "echo \${$1}")" ]] && usage $2 && echo && die "Missing <$1> argument !"; }
 
-# Ends the execution if given command $1 returns an error and displays debug information. Usage: 'assertok "command" $LINENO'
+# Ends the execution if given command $1 returns an error and displays debug information, usage:
+#   assertok "command" $LINENO
 assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
 
-# Removes all colors, should be called when option --no-color (-c) is used
-remove_color() {
+# Removes all colors, should be called when option --no-color (-c) is used, usage:
+#   remove_colors
+#   [[ has_option 'c/no-color' ]] && remove_colors
+remove_colors() {
     NC=; BLACK=; DARK_GRAY=; RED=; LIGHT_RED=; GREEN=; LIGHT_GREEN=;
     BROWN=; YELLOW=; BLUE=; LIGHT_BLUE=; PURPLE=; LIGHT_PURPLE=;
     CYAN=; LIGHT_CYAN=; LIGHT_GRAY=; WHITE=; BG_BLACK=; BG_RED=;
@@ -183,7 +204,7 @@ check_option() {
     return 1;
 }
 
-# Make a spinner at the beginning of the standard output line, usage:
+# Displays a spinner at the beginning of the standard output line, usage:
 #   spinner <command>
 #   spinner <command> <before>
 #   spinner <command> <before> <after>
@@ -202,7 +223,7 @@ spinner() {
     echo -ne "${CLEAR_ALL}\r"
 }
 
-# Make a spinner at the beginning of the standard output line, in green, usage:
+# Displays a spinner at the beginning of the standard output line, in green, usage:
 #   spinner_green <command>
 #   spinner_green <command> <before>
 #   spinner_green <command> <before> <after>
@@ -218,13 +239,15 @@ empty_flag() { [[ -z "$(get_flag "$1")" ]]; }
 has_flag() { [[ "$(get_flag "$1")" = "${FLAGS_TRUE}" ]]; }
 hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
 
-# Disable flags_help() function of shFlags
+# Disables flags_help() function of shFlags
 flags_help() { return 0; }
 
-# Escape git branch names for use in file names
+# Escapes git branch names for use in file names, usage:
+#   file_escape <name>
 file_escape() { echo "${1//[^[:alnum:]._-]/-}"; }
 
-# Call a third-party program to open/execute given file. Usage: 'file_exec <filename>'
+# Calls a third-party program to open/execute given file, usage:
+#   file_exec <filename>
 file_exec() {
     [[ -z "$1" ]] && die "Missing filename."
     [[ -f "$1" ]] || return 1;
@@ -236,7 +259,8 @@ file_exec() {
     eval "${file_application}" "$1" || trace "Failed to exec file '$1' (error code: '$?') with:\n${file_application} \"$1\""
 }
 
-# Parse and evaluate a given template. Usage: 'parse_template <template_name> <generated_file_name> <generated_file_suffix>'
+# Parses and evaluate a given template, usage:
+#   parse_template <template_name> <generated_file_name> <generated_file_suffix>
 parse_template() {
     [[ -z "$1" ]] && die "Missing templates path."
     [[ -z "$2" ]] && die "Missing template name."
@@ -317,7 +341,8 @@ parse_template() {
     return 0;
 }
 
-# Colorize a given markdown text
+# Colorizes a given markdown text, usage:
+#   colorize_markdown <markdown>
 colorize_markdown() {
     [[ -z "$1" ]] && return 1;
     local colorized_markdown lhs rhs
@@ -334,7 +359,10 @@ colorize_markdown() {
     return 0;
 }
 
-# Display usage information
+# Displays usage information, based on help file declared in variable HELP_FILE, usage:
+#   usage
+#   usage <command>
+#   usage <command> <subcomand>
 usage() {
     local help_file help_content
     help_file="$(echo gl_common_get_var HELP_FILE)"
