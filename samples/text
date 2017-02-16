@@ -18,6 +18,8 @@
 . ../gl-common.sh SAMPLE_SPINNER
 if [[ $? > 0 ]]; then echo "Error when loading file '../gl-common.sh'"; exit 1; fi
 
+has_option_wf "debug" "$@" # Used to trigger debug mode with flag --debug
+
 trace "a trace"
 info "an info"
 question "a question, "
@@ -25,3 +27,5 @@ question "enter a text: " TEXT
 info "your text was: $TEXT"
 question "enter a text: " TEXT "there is a default value this time !"
 info "your text was: $TEXT"
+warn "a warn"
+debug "a debug"

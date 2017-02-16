@@ -157,9 +157,9 @@ remove_colors() {
 }
 
 # Checks if an option is present, usage:
-#   has_option <o> $@
-#   has_option <option> $@
-#   has_option <o/option> $@
+#   has_option <o> "$@"
+#   has_option <option> "$@"
+#   has_option <o/option> "$@"
 has_option() {
     local option="$1"
     while [[ $# > 1 ]]; do
@@ -170,9 +170,9 @@ has_option() {
 }
 
 # Gets value on an option, usage:
-#   get_option <o> $@
-#   get_option <option> $@
-#   get_option <o/option> $@
+#   get_option <o> "$@"
+#   get_option <option> "$@"
+#   get_option <o/option> "$@"
 get_option() {
     local option="$1"
     while [[ $# > 1 ]]; do
@@ -229,16 +229,27 @@ hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
 # Disables flags_help() function of shFlags
 flags_help() { return 0; }
 
-# Checks if a flag is set with shFlags, fallback to get_option otherwise and stores the result like shFlags does, usage:
-#   has_option_wf <flag>
+# Checks if a flag is set with shFlags, fallback to has_option otherwise and stores the result like shFlags does, usage:
+#   has_option_wf <flag> "$@"
 has_option_wf() {
     has_flag $1 && return 0;
     local option
-    has_option $@
+    has_option "$@"
     option=$?
-    trace set_flag "$1" "${option}"
     set_flag "$1" "${option}"
     return "${option}"
+}
+
+# Gets content of a flag sets with shFlags, fallback to get_option if empty (or not set) and stores the result like shFlags does, usage:
+#   has_option_wf <flag> "$@"
+get_option_wf() {
+    local value
+    value="$(get_flag $1)"
+    [[ -n "${value}" ]] && echo -n "${value}" && return 0;
+    value="$(get_option "$@")"
+    set_flag "$1" "${value}"
+    echo -n "${value}"
+    return 0;
 }
 
 # Displays a spinner at the beginning of the standard output line, usage:
