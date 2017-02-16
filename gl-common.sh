@@ -317,8 +317,9 @@ spinner_green() {
 
 # Returns the HTTP code for given url, usage:
 #   curl_http_code <url>
+#   curl_http_code <url> <options>
 curl_http_code(){
-    curl -s -o /dev/null -w '%{http_code}' "$1"
+    curl -s -o /dev/null -w '%{http_code}' "$@"
 }
 
 # Escapes git branch names for use in file names, usage:
@@ -339,22 +340,18 @@ file_exec() {
 }
 
 # Parses and evaluate a given template, usage:
-#   parse_template <template_name> <generated_file_name> <generated_file_suffix>
+#   parse_template <template_file> <generated_file_name>
+#   parse_template <template_file> <generated_file_name> <generated_file_suffix>
 parse_template() {
     [[ -z "$1" ]] && die "Missing templates path."
     [[ -z "$2" ]] && die "Missing template name."
     [[ -z "$3" ]] && die "Missing default generated file name."
-    local template_path template_name generated_file_name generated_file_suffix template_file lhs value rhs parsed_template
-    template_path="$1"
-    template_name="$2"
-    generated_file_name="$3"
-    generated_file_suffix="$4"
-    template_file="${template_path}/${template_name}"
-    if [[ -f "${template_name}" ]]; then
-        template_file="${template_name}"
-    fi
+    local template_file generated_file_name generated_file_suffix lhs value rhs parsed_template
+    template_file="$1"
+    generated_file_name="$2"
+    generated_file_suffix="$3"
     if [[ ! -f "${template_file}" ]]; then
-        warn "Template '${template_name}': file not found."
+        warn "Template '${template_file}': file not found."
         return 1;
     fi
     parsed_template="$(<"${template_file}")"
@@ -369,7 +366,7 @@ parse_template() {
         value="${BASH_REMATCH[2]}"
         rhs="$(eval echo -n "\"\${$value}\"")"
         if [[ $? != 0 ]]; then
-            warn "Template '${template_name}': error when evaluating variable tag: '${lhs}'."
+            warn "Template '${template_file}': error when evaluating variable tag: '${lhs}'."
             return 10;
         fi
         parsed_template="${parsed_template//"${lhs}"/"${rhs}"}"
@@ -380,7 +377,7 @@ parse_template() {
         value="${BASH_REMATCH[2]}"
         eval "${value}"
         if [[ $? != 0 ]]; then
-            warn "Template '${template_name}': error when evaluating not echoed command tag: '${lhs}'."
+            warn "Template '${template_file}': error when evaluating not echoed command tag: '${lhs}'."
             return 11;
         fi
         parsed_template="${parsed_template//"${lhs}"/}"
@@ -391,7 +388,7 @@ parse_template() {
         value="${BASH_REMATCH[2]}"
         rhs="$(eval "${value}")"
         if [[ $? != 0 ]]; then
-            warn "Template '${template_name}': error when evaluating echoed command tag: '${lhs}'."
+            warn "Template '${template_file}': error when evaluating echoed command tag: '${lhs}'."
             return 12;
         fi
         parsed_template="${parsed_template//"${lhs}"/"${rhs}"}"
@@ -402,20 +399,20 @@ parse_template() {
         value="${BASH_REMATCH[2]}"
         eval "${value}" > "${generated_file_name}${generated_file_suffix}"
         if [[ $? = 0 ]]; then
-            info "Template '${template_name}': File '${generated_file_name}${generated_file_suffix}' generated."
+            info "Template '${template_file}': File '${generated_file_name}${generated_file_suffix}' generated."
             file_exec "${generated_file_name}${generated_file_suffix}"
             return 0;
         else
-            warn "Template '${template_name}': error when evaluating to-file command tag: '${lhs}'."
+            warn "Template '${template_file}': error when evaluating to-file command tag: '${lhs}'."
             return 13;
         fi
     fi
     if [[ ! -z "${generated_file_name}${generated_file_suffix}" ]]; then
         echo -n "${parsed_template}" > "${generated_file_name}${generated_file_suffix}"
-        info "Template '${template_name}': File '${generated_file_name}${generated_file_suffix}' generated."
+        info "Template '${template_file}': File '${generated_file_name}${generated_file_suffix}' generated."
         file_exec "${generated_file_name}${generated_file_suffix}"
     else
-        info "Template '${template_name}': executed."
+        info "Template '${template_file}': executed."
     fi
     return 0;
 }
