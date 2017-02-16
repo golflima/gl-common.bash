@@ -22,4 +22,4 @@ if [[ $? > 0 ]]; then echo "Error when loading file '${SAMPLES_DIR}/../gl-common
 info "Press [Ctrl+C] to exit."
 
 spinner_green 'sleep 1'
-spinner_green 'sleep 5' '' 'echo -n " Running pid: $pid (index: $index) (mode: $mode) "' "$1"
+spinner_green 'sleep 5' '' 'echo -n " Running pid: $pid (index: $index) (mode: $mode) "' "$1" "$2"

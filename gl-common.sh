@@ -279,15 +279,17 @@ get_option_wf() {
 #   spinner <command> <before>
 #   spinner <command> <before> <after>
 #   spinner <command> <before> <after> <mode>
+#   spinner <command> <before> <after> <mode> <sleep>
 spinner() {
-    local command="$1" before="$2" after="$3" mode="$4" index=0 pid
+    local command="$1" before="$2" after="$3" mode="$4" sleep="$5" index=0 pid
     [[ -z "${mode}" ]] && mode="$((${RANDOM} % ${#GL_COMMON_BASH_SPINNER_CHARS[@]}))"
+    [[ -z "${sleep}" ]] && sleep=0.25s
     ${command} &
     pid="$!"
     while ps -p"${pid}" -o "pid=" >/dev/null 2>&1; do
         [[ "${index}" -ge "${#GL_COMMON_BASH_SPINNER_CHARS[${mode}]}" ]] && index=0
         echo -en "\r$(eval "${before}")${GL_COMMON_BASH_SPINNER_CHARS[${mode}]:${index}:1}$(eval "${after}")"
-        sleep 0.25
+        sleep "${sleep}"
         let index++
     done
     echo -ne "${CLEAR_ALL}\r"
@@ -299,7 +301,7 @@ spinner() {
 #   spinner_green <command> <before> <after>
 #   spinner_green <command> <before> <after> <mode>
 spinner_green() {
-    spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3" "$4"
+    spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3" "$4" "$5"
 }
 
 # Returns the HTTP code for given url, usage:
