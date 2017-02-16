@@ -17,6 +17,7 @@
 # Load gl-common.bash from a remote URL
 eval "$(curl -sL https://raw.githubusercontent.com/golflima/gl-common.bash/master/gl-common.sh)"
 if [[ $? > 0 ]]; then echo "Error when loading gl-common.sh"; exit 1; fi
+GL_COMMON_BASH_PROGRAM_VAR_PREFIX=EXAMPLE_
 
 # 'end' function is declared in gl-common.sh, so it can works only if it is loaded
 end "gl-common.sh successfully loaded !"

@@ -31,7 +31,7 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX="$1"
 ############## Constants ##############
 
 # Version
-GL_COMMON_BASH_VERSION='0.2.0+170216';
+GL_COMMON_BASH_VERSION='0.2.1+170216';
 
 # Special chars
 # No color
@@ -91,7 +91,7 @@ gl_common_get_var() { get_var "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1"; }
 #   init_var <variable_name> <default_command> <env_prefix>
 init_var() {
     local env_var="$(get_var "$3$1")"
-    [[ -z "${env_var}" ]] && set_var "$1" "eval \"$2\"" || set_var "$1" "${env_var}"
+    [[ -z "${env_var}" ]] && set_var "$1" "$(eval $2)" || set_var "$1" "${env_var}"
 }
 
 # Displays trace information message $@ in dark gray, usage:

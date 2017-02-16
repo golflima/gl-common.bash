@@ -10,7 +10,7 @@ Key features:
 * Simplifies use of shFlags
 * Easy documentation of your scripts with Markdown
 
-And it has many free [samples](samples).
+And it has many free [examples](examples).
 
 
 
@@ -43,6 +43,12 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX=MYAPP_
 ```
 
 You may want to replace `MYAPP_` with your very own prefix.
+
+
+
+## Scripting reference
+
+[View *gl-common.bash* scripting reference.](Scripting Reference.md)
 
 
 
