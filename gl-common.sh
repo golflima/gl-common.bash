@@ -212,7 +212,7 @@ get_flag() { local flag; flag="FLAGS_$1"; echo -n "$(eval "echo -n \${${flag}}")
 
 # Sets content of a flag, with shFlags, usage:
 #   set_flag <flag> <value>
-set_flag() { local flag; flag="FLAGS_$1"; eval "\${${flag}}=\"$2\""; }
+set_flag() { local flag; flag="FLAGS_$1"; eval "${flag}=\"$2\""; }
 
 # Checks if a flag is empty (or not set), with shFlags, usage:
 #   empty_flag <flag>
@@ -229,7 +229,17 @@ hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
 # Disables flags_help() function of shFlags
 flags_help() { return 0; }
 
-#
+# Checks if a flag is set with shFlags, fallback to get_option otherwise and stores the result like shFlags does, usage:
+#   has_option_wf <flag>
+has_option_wf() {
+    has_flag $1 && return 0;
+    local option
+    has_option $@
+    option=$?
+    trace set_flag "$1" "${option}"
+    set_flag "$1" "${option}"
+    return "${option}"
+}
 
 # Displays a spinner at the beginning of the standard output line, usage:
 #   spinner <command>
