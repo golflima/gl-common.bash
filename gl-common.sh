@@ -204,6 +204,33 @@ check_option() {
     return 1;
 }
 
+# Convenience functions for checking shFlags flags
+
+# Gets content of a flag, with shFlags, usage:
+#   get_flag <flag>
+get_flag() { local flag; flag="FLAGS_$1"; echo -n "$(eval "echo -n \${${flag}}")"; }
+
+# Sets content of a flag, with shFlags, usage:
+#   set_flag <flag> <value>
+set_flag() { local flag; flag="FLAGS_$1"; eval "\${${flag}}=\"$2\""; }
+
+# Checks if a flag is empty (or not set), with shFlags, usage:
+#   empty_flag <flag>
+empty_flag() { [[ -z "$(get_flag "$1")" ]]; }
+
+# Checks if a boolean flag is set, with shFlags, usage:
+#   has_flag <usage>
+has_flag() { [[ "$(get_flag "$1")" = "${FLAGS_TRUE}" ]]; }
+
+# Checks if a boolean flag is not set (or false), with shFlags, usage:
+#   hasnt_flag <usage>
+hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
+
+# Disables flags_help() function of shFlags
+flags_help() { return 0; }
+
+#
+
 # Displays a spinner at the beginning of the standard output line, usage:
 #   spinner <command>
 #   spinner <command> <before>
@@ -231,16 +258,6 @@ spinner() {
 spinner_green() {
     spinner "$1" "echo -en \"${LIGHT_GREEN}\"; $2" "echo -en \"${NC}\"; $3" "$4"
 }
-
-# Convenience functions for checking shFlags flags
-get_flag() { local flag; flag="FLAGS_$1"; echo -n "$(eval "echo -n \${${flag}}")"; }
-set_flag() { local flag; flag="FLAGS_$1"; eval "\${${flag}}=\"$2\""; }
-empty_flag() { [[ -z "$(get_flag "$1")" ]]; }
-has_flag() { [[ "$(get_flag "$1")" = "${FLAGS_TRUE}" ]]; }
-hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
-
-# Disables flags_help() function of shFlags
-flags_help() { return 0; }
 
 # Escapes git branch names for use in file names, usage:
 #   file_escape <name>
