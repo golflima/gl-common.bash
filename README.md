@@ -46,6 +46,12 @@ You may want to replace `MYAPP_` with your very own prefix.
 
 
 
+## Scripting reference
+
+[View *gl-common.bash* scripting reference.](Scripting Reference.md)
+
+
+
 __________________________________________________
 
 ## Licence terms
