@@ -19,14 +19,12 @@ readonly SAMPLES_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 . "${SAMPLES_DIR}/../gl-common.sh" SAMPLES_
 if [[ $? > 0 ]]; then echo "Error when loading file '${SAMPLES_DIR}/../gl-common.sh'"; exit 1; fi
 
-has_option_wf "debug" "$@" # Used to trigger debug mode with flag --debug
+# Declare help header
+SAMPLES_HELP_HEADER="must supply at least one argument to call this sample"
 
-trace "a trace"
-info "an info"
-question "a question, "
-question "enter a text: " TEXT
-info "your text was: $TEXT"
-question "enter a text: " TEXT "there is a default value this time !"
-info "your text was: $TEXT"
-warn "a warn"
-debug "a debug"
+arg1=$1
+require_argument arg1
+trace require_argument arg1 OK
+
+require_script_file colors
+

@@ -78,7 +78,7 @@ GL_COMMON_BASH_SPINNER_CHARS[5]='▄▀';
 # Gets the content of a prefixed VAR, usage:
 #   gl_common_get_var <var>
 gl_common_get_var() {
-    echo -n "${$(echo -n "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}_$1")}"
+    echo -n "$(eval "echo \${${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1}")"
 }
 
 # Displays trace information message $@ in dark gray, usage:
@@ -141,6 +141,16 @@ password() {
 #   require_argument <variable_name>
 #   require_argument <variable_name> <subcommand>
 require_argument() { [[ -z "$(eval "echo \${$1}")" ]] && usage $2 && echo && die "Missing <$1> argument !"; }
+
+# Loads required script file and dies if it is not found or if there is an error, usage:
+#   require_script_file <file>
+#   require_script_file <file> <arguments>
+require_script_file() {
+    ! [[ -e "$1" ]] && die "Required file '$1' not found."
+    . "$@"
+    local error_code=$?
+    [[ "${error_code}" > 0 ]] && die "Error when loading file '$1', error_code: ${error_code}."
+}
 
 # Ends the execution if given command $1 returns an error and displays debug information, usage:
 #   assertok "command" $LINENO
@@ -207,11 +217,11 @@ check_option() {
 
 # Gets content of a flag, with shFlags, usage:
 #   get_flag <flag>
-get_flag() { local flag; flag="FLAGS_$1"; echo -n "$(eval "echo -n \${${flag}}")"; }
+get_flag() { echo -n "$(eval "echo -n \${FLAGS_$1}")"; }
 
 # Sets content of a flag, with shFlags, usage:
 #   set_flag <flag> <value>
-set_flag() { local flag; flag="FLAGS_$1"; eval "${flag}=\"$2\""; }
+set_flag() { eval "FLAGS_$1=\"$2\""; }
 
 # Checks if a flag is empty (or not set), with shFlags, usage:
 #   empty_flag <flag>
@@ -403,13 +413,14 @@ colorize_markdown() {
 #   usage <command>
 #   usage <command> <subcomand>
 usage() {
-    local help_file help_content
-    help_file="$(echo gl_common_get_var HELP_FILE)"
-    [[ -f "${help_file}" ]] || die "Cannot locate help file: '${help_file}'."
-    help_content="$(<"${help_file}")"
-    [[ "${help_content}" =~ $(echo gl_common_get_var HELP_TITLE_PREFIX)[[:blank:]]*$1[[:blank:]]*$2[[:cntrl:]]*([^#]*)## ]] || \
-    [[ "${help_content}" =~ $(echo gl_common_get_var HELP_TITLE_PREFIX)[[:blank:]]*$1[[:cntrl:]]*([^#]*)## ]] || \
-    [[ "${help_content}" =~ $(echo gl_common_get_var HELP_TITLE_PREFIX)[[:cntrl:]]*([^#]*)## ]] || return 1;
-    help_content="${BASH_REMATCH[1]}"
-    echo -e "$(colorize_markdown "${help_header}\n${help_content}")"
+    local help_file="$(gl_common_get_var HELP_FILE)" help_title_prefix="$(gl_common_get_var HELP_TITLE_PREFIX)" help_content
+    if [[ -n "${help_file}" ]]; then
+        [[ -f "${help_file}" ]] || trace "Cannot locate help file: '${help_file}'."
+        help_content="$(<"${help_file}")"
+        [[ "${help_content}" =~ ${help_title_prefix}[[:blank:]]*$1[[:blank:]]*$2[[:cntrl:]]*([^#]*)## ]] || \
+        [[ "${help_content}" =~ ${help_title_prefix}[[:blank:]]*$1[[:cntrl:]]*([^#]*)## ]] || \
+        [[ "${help_content}" =~ ${help_title_prefix}[[:cntrl:]]*([^#]*)## ]] || return 1;
+        help_content="${BASH_REMATCH[1]}"
+    fi
+    echo -e "$(colorize_markdown "$(gl_common_get_var HELP_HEADER)\n${help_content}")"
 }
