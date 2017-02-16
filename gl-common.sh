@@ -31,7 +31,7 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX="$1"
 ############## Constants ##############
 
 # Version
-GL_COMMON_BASH_VERSION='0.2.0+170217';
+GL_COMMON_BASH_VERSION='0.2.0+170216';
 
 # Special chars
 # No color
