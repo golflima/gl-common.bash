@@ -80,6 +80,8 @@ These variables can be accessed and assigned with these commands, without specif
 * `${TAB}` outputs a tabulation, equivalent to `\t`
 * `${LF}` outputs a line feed, equivalent to `\n`
 
+> [Example](examples/colors)
+
 ### shFlags compatibility
 
 * `${FLAGS_TRUE}` is set to `0` if not already set, for compatibility with shFlags
@@ -91,6 +93,8 @@ These variables can be accessed and assigned with these commands, without specif
 * `set_var VARIABLE_NAME VALUE` sets the value of given variable name in *VARIABLE_NAME* with value in *VALUE*
 * `init_var NAME COMMAND` checks if variable *NAME* is defined or sets its value to standard output of given *COMMAND* otherwise
 * `init_var NAME COMMAND PREFIX` checks if variable *PREFIXNAME* is defined and sets its value to variable *NAME* or sets value of variable *NAME* to standard output of given *COMMAND* otherwise
+
+> [Example](examples/variables)
 
 ## Pipes
 
@@ -119,6 +123,8 @@ These variables can be accessed and assigned with these commands, without specif
 * `password TEXT NAME` displays *TEXT* in light purple and stores user's input (always from `/dev/tty`) but without displaying it
 * `remove_colors` disables all colors, typically called this way: `[[ has_option 'c/no-color' ]] && remove_colors`
 
+> [Example](examples/text)
+
 ## Script's options
 
 ### Options
@@ -131,6 +137,8 @@ Note: *OPTION* in commands above can be formed like:
 * `O` to represent a simple option, passed like `-O` to the script
 * `OPTION` to represent a long option, passed like `--OPTION` to the script
 * `'O/OPTION'` to represent either a simple option `-O` or a long option `--OPTION` passed to the script
+
+> [Example](examples/flags)
 
 ### shFlags
 
@@ -161,6 +169,8 @@ Note: *FLAG* in commands above can be formed like:
 * `F` to represent a simple flag, passed like `-F` to the script
 * `FLAG` to represent a long flag, passed like `--FLAG` to the script
 
+> [Example](examples/flags)
+
 ## URL manipuation
 
 * `curl_http_code URL` returns the HTTP code for given *URL*
@@ -173,6 +183,8 @@ Note: *FLAG* in commands above can be formed like:
 * `usage COMMAND` displays script's help for *COMMAND* contained in section *HELP_TITLE_PREFIX* *COMMAND* of given help file *HELP_FILE*, preceeded by the text contained in *HELP_HEADER*
 * `usage COMMAND SUBCOMMAND` displays script's help for *COMMAND* *SUBCOMMAND* contained in section *HELP_TITLE_PREFIX* *COMMAND* *SUBCOMMAND* of given help file *HELP_FILE*, preceeded by the text contained in *HELP_HEADER*
 
+> [Example](examples/usage)
+
 ## Spinners for long operations
 
 * `spinner COMMAND` displays a spinner while executing *COMMAND* and returns its standard output
@@ -181,3 +193,5 @@ Note: *FLAG* in commands above can be formed like:
 * `spinner COMMAND BEFORE AFTER MODE` displays a spinner while executing *COMMAND* and returns its standard output, and append result of commands *BEFORE* and *AFTER* respectively before and after the spinner, and force spinner display to given *MODE*
 * `spinner COMMAND BEFORE AFTER MODE SLEEP` displays a spinner while executing *COMMAND* and returns its standard output, and append result of commands *BEFORE* and *AFTER* respectively before and after the spinner, and force spinner display to given *MODE*, and force spinner refresh rate to given *SLEEP* time between each frame
 * `spinner_green` behaves exactly like `spinner` and accepts the same arguments, except it force the color of spinner to light green
+
+> [Example](examples/spinner)
