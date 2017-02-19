@@ -29,7 +29,8 @@ gl_common_set_var_prefix MYAPP_
 
 ### Special variables
 
-* `<PREFIX>NAME` is the name of your script/program/application
+* `<PREFIX>NAME` is the name of your script/program/application, used by `assertok`
+* `<PREFIX>VERSION` is the version of your script/program/application, used by `assertok`
 * `<PREFIX>EXEC_<FILE_EXTENSION>` is the path to the program to use when openning file with `file_exec` with given `<FILE_EXTENSION>`
 * `<PREFIX>HELP_TITLE_PREFIX` is the prefix of title sections to ignore when calling `usage`
 * `<PREFIX>HELP_HEADER` is the text to displays always first when calling `usage`
@@ -105,4 +106,15 @@ These variables can be accessed and assigned with these commands, without specif
 * `trace_var NAME` displays name of given variable *NAME* and its content in dark grey
 * `debug TEXT` displays *TEXT* in dark grey, only if flag `debug` is set
 * `debug_var NAME` displays name of given variable *NAME* and its content in dark grey, only if flag `debug` is set
+* `info TEXT` displays *TEXT* in light blue
+* `success TEXT` displays *TEXT* in green
+* `warn TEXT` displays *TEXT* in brown / dark yellow
+* `die` exists script's execution with return code `1`
+* `die TEXT` exists script's execution with return code `1` and displays *TEXT* in light red
+* `end` exists script's execution with return code `0`
+* `end TEXT` exists script's execution with return code `0` and displays *TEXT* in green
+* `question TEXT` displays *TEXT* in light purple
+* `question TEXT NAME` displays *TEXT* in light purple and stores user's input (always from `/dev/tty`) (validated with [Enter] key) in variable *NAME*
+* `question TEXT NAME DEFAULT` displays *TEXT* in light purple and stores user's input, prefilled with default value *DEFAULT*, (always from `/dev/tty`) (validated with [Enter] key) in variable *NAME*
+* `password TEXT NAME` displays *TEXT* in light purple and stores user's input (always from `/dev/tty`) but without displaying it
 
