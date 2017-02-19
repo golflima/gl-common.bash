@@ -19,11 +19,10 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 . "${EXAMPLE_DIR}/../gl-common.sh" EXAMPLE_
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
-info "Press [Ctrl+C] to exit."
-
-spinner_green 'sleep 1'
-spinner_green 'sleep 5' '' 'echo -n " Running pid: $pid (index: $index) (mode: $mode) "' "$1" "$2"
-spinner 'curl_http_code https://www.gnu.org/licenses/lgpl-3.0.txt' 'echo -en "${NC}Getting LICENSE ... ${LIGHT_RED}"'
+set_var FOO BAR
+trace_var FOO
+trace $(get_var FOO)
+get_var FOO
 echo
-LICENSE="$(spinner 'curl -sL https://www.gnu.org/licenses/lgpl-3.0.txt')"
-trace_var LICENSE
+init_var LICENSE "spinner_green 'curl -sL https://www.gnu.org/licenses/lgpl-3.0.txt' | escape_piped"
+grep GNU "${EXAMPLE_DIR}/../LICENSE" <<< "${LICENSE}" | echo_piped -e "Grepped GNU: "

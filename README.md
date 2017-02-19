@@ -39,7 +39,7 @@ In your script, put:
 # Load gl-common.bash from a remote URL
 eval "$(curl -sL https://raw.githubusercontent.com/golflima/gl-common.bash/master/gl-common.sh)"
 if [[ $? > 0 ]]; then echo "Error when loading gl-common.sh"; exit 1; fi
-GL_COMMON_BASH_PROGRAM_VAR_PREFIX=MYAPP_
+gl_common_set_var_prefix MYAPP_
 ```
 
 You may want to replace `MYAPP_` with your very own prefix.

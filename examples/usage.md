@@ -1,4 +1,4 @@
-# Sample Help for "usage"
+# Example Help for "usage"
 
 ## test
 

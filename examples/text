@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Sample for gl-common.bash
+# Example for gl-common.bash
 #
 # CC0 - Public Domain, jeremy.walther@golflima.net
 # To the extent possible under law, Jérémy Walther has waived
@@ -10,7 +10,7 @@
 #
 # Feel free to use it as you want.
 #
-# This sample is distributed in the hope that it will be useful,
+# This example is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -25,8 +25,14 @@ trace "a trace"
 info "an info"
 question "a question, "
 question "enter a text: " TEXT
-info "your text was: $TEXT"
+info "your text was: ${TEXT}"
 question "enter a text: " TEXT "there is a default value this time !"
-info "your text was: $TEXT"
+trace_var TEXT
+debug_var TEXT
+password "enter some sensitive data: " SECRET
+info "the md5 hash of your secret was: $(md5sum <<< "${SECRET}")"
 warn "a warn"
 debug "a debug"
+success "Success !"
+end "This is the END"
+die "This text won't be displayed since end() was called before."

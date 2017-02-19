@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Sample for gl-common.bash
+# Example for gl-common.bash
 #
 # CC0 - Public Domain, jeremy.walther@golflima.net
 # To the extent possible under law, Jérémy Walther has waived
@@ -10,7 +10,7 @@
 #
 # Feel free to use it as you want.
 #
-# This sample is distributed in the hope that it will be useful,
+# This example is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -20,7 +20,7 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
 # Declare help header
-EXAMPLE_HELP_HEADER="must supply at least one argument to call this sample"
+EXAMPLE_HELP_HEADER="must supply at least one argument to call this example"
 
 arg1=$1
 require_argument arg1
@@ -29,5 +29,5 @@ trace require_argument arg1 OK
 require_script_file colors
 trace require_script_file colors OK
 
-require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/samples/spinner.sh
-trace require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/samples/spinner.sh OK
+require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/examples/spinner.sh
+trace require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/examples/spinner.sh OK

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Sample for gl-common.bash
+# Example for gl-common.bash
 #
 # CC0 - Public Domain, jeremy.walther@golflima.net
 # To the extent possible under law, Jérémy Walther has waived
@@ -10,7 +10,7 @@
 #
 # Feel free to use it as you want.
 #
-# This sample is distributed in the hope that it will be useful,
+# This example is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -20,7 +20,7 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
 test_color() {
-    echo -e "$(eval "echo \${$1}")$1${NC}"
+    echo -e "$(get_var $1)$1${NC}"
 }
 
 test_color BLACK
