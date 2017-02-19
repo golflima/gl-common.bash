@@ -270,11 +270,11 @@ set_flag() { set_var "FLAGS_$1" "$2"; }
 empty_flag() { [[ -z "$(get_flag "$1")" ]]; }
 
 # Checks if a boolean flag is set, with shFlags, usage:
-#   has_flag <usage>
+#   has_flag <flag>
 has_flag() { [[ "$(get_flag "$1")" = "${FLAGS_TRUE}" ]]; }
 
 # Checks if a boolean flag is not set (or false), with shFlags, usage:
-#   hasnt_flag <usage>
+#   hasnt_flag <flag>
 hasnt_flag() { [[ "$(get_flag "$1")" != "${FLAGS_TRUE}" ]]; }
 
 # Disables flags_help() function of shFlags

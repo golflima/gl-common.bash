@@ -20,7 +20,7 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
 test_color() {
-    echo -e "$(eval "echo \${$1}")$1${NC}"
+    echo -e "$(get_var $1)$1${NC}"
 }
 
 test_color BLACK

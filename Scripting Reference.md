@@ -117,4 +117,47 @@ These variables can be accessed and assigned with these commands, without specif
 * `question TEXT NAME` displays *TEXT* in light purple and stores user's input (always from `/dev/tty`) (validated with [Enter] key) in variable *NAME*
 * `question TEXT NAME DEFAULT` displays *TEXT* in light purple and stores user's input, prefilled with default value *DEFAULT*, (always from `/dev/tty`) (validated with [Enter] key) in variable *NAME*
 * `password TEXT NAME` displays *TEXT* in light purple and stores user's input (always from `/dev/tty`) but without displaying it
+* `remove_colors` disables all colors, typically called this way: `[[ has_option 'c/no-color' ]] && remove_colors`
+
+## Script's options
+
+### Options
+
+* `has_option OPTION "$@"` checks if option *OPTION* was passed to the script
+* `get_option OPTION "$@"` gets value of option *OPTION* passed to the script
+
+Note: *OPTION* in commands above can be formed like:
+
+* `O` to represent a simple option, passed like `-O` to the script
+* `OPTION` to represent a long option, passed like `--OPTION` to the script
+* `'O/OPTION'` to represent either a simple option `-O` or a long option `--OPTION` passed to the script
+
+### shFlags
+
+*gl-common.bash* provides some functions to easily deals with [*shFlags*](https://github.com/kward/shflags). It is not mandatory to use it when using *gl-common.bash*, and following functions are compatible with *shFlags*:
+
+* `has_flag FLAG` checks if *FLAG* was passed to the script
+* `hasnt_flag FLAG` checks if *FLAG* wasn't passed to the script
+* `empty_flag FLAG` checks if *FLAG* value is empty
+* `get_flag FLAG` gets value of *FLAG* passed to the script
+* `set_flag FLAG VALUE` sets *VALUE* of given *FLAG*
+
+Note: *FLAG* in commands above can be formed like:
+
+* `F` to represent a simple flag, passed like `-F` to the script
+* `FLAG` to represent a long flag, passed like `--FLAG` to the script
+
+Note: *gl-common.bash* automatically disables the *help* feature of *shFlags* because it already have its powerfull `usage` function.
+
+### Using Options to deals with shFlags
+
+*gl-common.bash* is able to dynamically bind *options* to *flags* with following functions. They more effective, but less powerfull:
+
+* `has_option_wf FLAG` checks if *FLAG* is set with *shFlags*, fallback to `has_option FLAG` otherwise and stores the result like *shFlags* does
+* `get_option_wf FLAG` gets content of *FLAG* sets with *shFlags*, fallback to `get_option FLAG` if empty (or not set) and stores the result like *shFlags* does
+
+Note: *FLAG* in commands above can be formed like:
+
+* `F` to represent a simple flag, passed like `-F` to the script
+* `FLAG` to represent a long flag, passed like `--FLAG` to the script
 
