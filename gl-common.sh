@@ -1,13 +1,11 @@
 # 
-# gl-common.bash is a library providing common utilities and functions
-# for Bash scripts.
+# gl-common.bash -- A library providing common utilities and functions
+# for Bash scripts, more information in file <Scripting Reference.md>.
 #
 # Feel free to contribute to this project at:
 #    https://github.com/golflima/gl-common.bash
 #
 # Copyright 2016-2017 Jérémy Walther (jeremy.walther@golflima.net).
-#
-# This file is part of gl-common.bash
 #
 # gl-common.bash is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published
@@ -16,7 +14,7 @@
 # 
 # gl-common.bash is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU Lesser General Public License for more details.
 # 
 # You should have received a copy of the GNU Lesser General Public License
