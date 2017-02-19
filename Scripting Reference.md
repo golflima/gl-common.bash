@@ -80,6 +80,11 @@ These variables can be accessed and assigned with these commands, without specif
 * `${TAB}` outputs a tabulation, equivalent to `\t`
 * `${LF}` outputs a line feed, equivalent to `\n`
 
+## Variable manipulation
+
+* `get_var VARIABLE_NAME` gets the value of given variable name in *VARIABLE_NAME*
+* `set_var VARIABLE_NAME VALUE` sets the value of given variable name in *VARIABLE_NAME* with value in *VALUE*
+
 > [Example](examples/colors)
 
 ### shFlags compatibility
