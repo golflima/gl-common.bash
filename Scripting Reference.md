@@ -161,3 +161,23 @@ Note: *FLAG* in commands above can be formed like:
 * `F` to represent a simple flag, passed like `-F` to the script
 * `FLAG` to represent a long flag, passed like `--FLAG` to the script
 
+## URL manipuation
+
+* `curl_http_code URL` returns the HTTP code for given *URL*
+* `curl_http_code URL OPTIONS` returns the HTTP code for given *URL* and applies given *curl* *OPTIONS*
+
+## Script's documentation in Markdown
+
+* `colorize_markdown TEXT` displays a colorized version of given markdown *TEXT*
+* `usage` displays general script's help contained in section *HELP_TITLE_PREFIX* of given help file *HELP_FILE*, preceeded by the text contained in *HELP_HEADER*
+* `usage COMMAND` displays script's help for *COMMAND* contained in section *HELP_TITLE_PREFIX* *COMMAND* of given help file *HELP_FILE*, preceeded by the text contained in *HELP_HEADER*
+* `usage COMMAND SUBCOMMAND` displays script's help for *COMMAND* *SUBCOMMAND* contained in section *HELP_TITLE_PREFIX* *COMMAND* *SUBCOMMAND* of given help file *HELP_FILE*, preceeded by the text contained in *HELP_HEADER*
+
+## Spinners for long operations
+
+* `spinner COMMAND` displays a spinner while executing *COMMAND* and returns its standard output
+* `spinner COMMAND BEFORE` displays a spinner while executing *COMMAND* and returns its standard output, and append result of command *BEFORE* before the spinner
+* `spinner COMMAND BEFORE AFTER` displays a spinner while executing *COMMAND* and returns its standard output, and append result of commands *BEFORE* and *AFTER* respectively before and after the spinner
+* `spinner COMMAND BEFORE AFTER MODE` displays a spinner while executing *COMMAND* and returns its standard output, and append result of commands *BEFORE* and *AFTER* respectively before and after the spinner, and force spinner display to given *MODE*
+* `spinner COMMAND BEFORE AFTER MODE SLEEP` displays a spinner while executing *COMMAND* and returns its standard output, and append result of commands *BEFORE* and *AFTER* respectively before and after the spinner, and force spinner display to given *MODE*, and force spinner refresh rate to given *SLEEP* time between each frame
+* `spinner_green` behaves exactly like `spinner` and accepts the same arguments, except it force the color of spinner to light green
