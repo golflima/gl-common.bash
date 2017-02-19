@@ -19,20 +19,10 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 . "${EXAMPLE_DIR}/../gl-common.sh" EXAMPLE_
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
-has_option_wf "debug" "$@" # Used to trigger debug mode with flag --debug
-
-trace "a trace"
-info "an info"
-question "a question, "
-question "enter a text: " TEXT
-info "your text was: ${TEXT}"
-question "enter a text: " TEXT "there is a default value this time !"
-trace_var TEXT
-debug_var TEXT
-password "enter some sensitive data: " SECRET
-info "the md5 hash of your secret was: $(md5sum <<< "${SECRET}")"
-warn "a warn"
-debug "a debug"
-success "Success !"
-end "This is the END"
-die "This text won't be displayed since end() was called before."
+set_var FOO BAR
+trace_var FOO
+trace $(get_var FOO)
+get_var FOO
+echo
+init_var LICENSE "spinner_green 'curl -sL https://www.gnu.org/licenses/lgpl-3.0.txt' | escape_piped"
+grep GNU "${EXAMPLE_DIR}/../LICENSE" <<< "${LICENSE}" | echo_piped -e "Grepped GNU: "

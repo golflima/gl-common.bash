@@ -23,3 +23,7 @@ info "Press [Ctrl+C] to exit."
 
 spinner_green 'sleep 1'
 spinner_green 'sleep 5' '' 'echo -n " Running pid: $pid (index: $index) (mode: $mode) "' "$1" "$2"
+spinner 'curl_http_code https://www.gnu.org/licenses/lgpl-3.0.txt' 'echo -en "${NC}Getting LICENSE ... ${LIGHT_RED}"'
+echo
+LICENSE="$(spinner 'curl -sL https://www.gnu.org/licenses/lgpl-3.0.txt')"
+trace_var LICENSE
