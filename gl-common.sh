@@ -75,6 +75,30 @@ GL_COMMON_BASH_SPINNER_CHARS[5]='▄▀';
 
 ############## General functions ##############
 
+# Gets value of given variable name, usage:
+#   get_var <variable_name>
+get_var() { echo -n "$(eval "echo \"\${$1}\"")"; }
+
+# Sets value of given variable name, usage:
+#   set_var <variable_name> <value>
+set_var() { eval "$1=\"$2\""; }
+
+# Gets value of variable prefix used by gl-common.bash to distinguish caller's variables, usage:
+#   gl_common_get_var_prefix
+gl_common_get_var_prefix() { get_var GL_COMMON_BASH_PROGRAM_VAR_PREFIX; }
+
+# Sets value of variable prefix used by gl-common.bash to distinguish caller's variables, usage:
+#   gl_common_get_var_prefix <prefix>
+gl_common_set_var_prefix() { set_var GL_COMMON_BASH_PROGRAM_VAR_PREFIX "$1"; }
+
+# Gets the content of a prefixed variable name, usage:
+#   gl_common_get_var <variable_name>
+gl_common_get_var() { get_var "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1"; }
+
+# Sets the content of a prefixed variable name, usage:
+#   gl_common_set_var <variable_name>
+gl_common_set_var() { set_var "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1" "$2"; }
+
 # Escapes piped value, usage:
 #   escape_piped <value>
 escape_piped() { sed -e 's/"/\\"/g' < /dev/stdin; }
@@ -84,23 +108,12 @@ escape_piped() { sed -e 's/"/\\"/g' < /dev/stdin; }
 # echo_piped <echo_options>
 echo_piped() { local IFS= content; read -d '' content; echo $@ "${content}"; }
 
-# Gets value of given variable name, usage:
-#   get_var <variable_name>
-get_var() { echo -n "$(eval "echo \"\${$1}\"")"; }
-
-# Sets value of given variable name, usage:
-#   set_var <variable_name> <value>
-set_var() { eval "$1=\"$2\""; }
-
-# Gets the content of a prefixed VAR, usage:
-#   gl_common_get_var <var>
-gl_common_get_var() { get_var "${GL_COMMON_BASH_PROGRAM_VAR_PREFIX}$1"; }
-
 # Initializes a variable from a prefixed environment variable, usage:
+#   init_var <variable_name> <default_command>
 #   init_var <variable_name> <default_command> <env_prefix>
 init_var() {
     local env_var="$(get_var "$3$1")"
-    [[ -z "${env_var}" ]] && set_var "$1" "$(eval "$2")" || set_var "$1" "${env_var}"
+    [[ -z "${env_var+x}" ]] && set_var "$1" "$(eval "$2")" || set_var "$1" "${env_var}"
 }
 
 # Displays trace information message $@ in dark gray, usage:

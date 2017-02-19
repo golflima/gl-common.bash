@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Sample for gl-common.bash
+# Example for gl-common.bash
 #
 # CC0 - Public Domain, jeremy.walther@golflima.net
 # To the extent possible under law, Jérémy Walther has waived
@@ -10,14 +10,14 @@
 #
 # Feel free to use it as you want.
 #
-# This sample is distributed in the hope that it will be useful,
+# This example is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 # Load gl-common.bash from a remote URL
 eval "$(curl -sL https://raw.githubusercontent.com/golflima/gl-common.bash/master/gl-common.sh)"
 if [[ $? > 0 ]]; then echo "Error when loading gl-common.sh"; exit 1; fi
-GL_COMMON_BASH_PROGRAM_VAR_PREFIX=EXAMPLE_
+gl_common_set_var_prefix EXAMPLE_
 
 # 'end' function is declared in gl-common.sh, so it can works only if it is loaded
 end "gl-common.sh successfully loaded !"
