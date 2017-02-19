@@ -68,8 +68,8 @@ GL_COMMON_BASH_SPINNER_CHARS[4]='░▒▓█▓▒ ';
 GL_COMMON_BASH_SPINNER_CHARS[5]='▄▀';
 
 # shFlags
-[[ -z "${FLAGS_TRUE}" ]] && FLAGS_TRUE=0;
-[[ -z "${FLAGS_FALSE}" ]] && FLAGS_FALSE=1;
+[[ -z "${FLAGS_TRUE+x}" ]] && FLAGS_TRUE=0;
+[[ -z "${FLAGS_FALSE+x}" ]] && FLAGS_FALSE=1;
 
 
 
