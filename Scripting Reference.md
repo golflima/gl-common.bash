@@ -1,8 +1,5 @@
 # gl-common.bash scripting refence
 
-<<<<<<< HEAD
-## Special variables
-=======
 ## Setup
 
 ### From local filesystem
@@ -46,7 +43,6 @@ These variables can be accessed and assigned with these commands, without specif
 * `gl_common_set_var NAME VALUE` gets the *VALUE* of normally prefixed variable *NAME*
 
 ## Global variables
->>>>>>> release/0.2.2+170219
 
 ### gl-common.bash variables
 
@@ -84,12 +80,11 @@ These variables can be accessed and assigned with these commands, without specif
 * `${TAB}` outputs a tabulation, equivalent to `\t`
 * `${LF}` outputs a line feed, equivalent to `\n`
 
-<<<<<<< HEAD
 ## Variable manipulation
 
 * `get_var VARIABLE_NAME` gets the value of given variable name in *VARIABLE_NAME*
 * `set_var VARIABLE_NAME VALUE` sets the value of given variable name in *VARIABLE_NAME* with value in *VALUE*
-=======
+
 > [Example](examples/colors)
 
 ### shFlags compatibility
@@ -205,4 +200,3 @@ Note: *FLAG* in commands above can be formed like:
 * `spinner_green` behaves exactly like `spinner` and accepts the same arguments, except it force the color of spinner to light green
 
 > [Example](examples/spinner)
->>>>>>> release/0.2.2+170219
