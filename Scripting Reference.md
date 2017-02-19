@@ -161,8 +161,8 @@ Note: *gl-common.bash* automatically disables the *help* feature of *shFlags* be
 
 *gl-common.bash* is able to dynamically bind *options* to *flags* with following functions. They more effective, but less powerfull:
 
-* `has_option_wf FLAG` checks if *FLAG* is set with *shFlags*, fallback to `has_option FLAG` otherwise and stores the result like *shFlags* does
-* `get_option_wf FLAG` gets content of *FLAG* sets with *shFlags*, fallback to `get_option FLAG` if empty (or not set) and stores the result like *shFlags* does
+* `has_option_wf FLAG "$@"` checks if *FLAG* is set with *shFlags*, fallback to `has_option FLAG` otherwise and stores the result like *shFlags* does
+* `get_option_wf FLAG "$@"` gets content of *FLAG* sets with *shFlags*, fallback to `get_option FLAG` if empty (or not set) and stores the result like *shFlags* does
 
 Note: *FLAG* in commands above can be formed like:
 
