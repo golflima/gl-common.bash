@@ -199,12 +199,16 @@ require_script_curl() {
 require_command() { [[ -z "$(type -t "$@")" ]] && die "Required command '$@' not found."; }
 
 # Ends the execution if given command $1 returns an error and displays debug information, usage:
-#   assert_ok "command" $LINENO
+#   assert_ok <command> $LINENO
 assert_ok() { ! $1 && warn "${LIGHT_RED}assert_ok failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
 
 # Ends the execution if given command $1 doesn't return an error and displays debug information, usage:
-#   assert_ko "command" $LINENO
+#   assert_ko <command> $LINENO
 assert_ko() { $1 && warn "${LIGHT_RED}assert_ko failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+
+# Ends the execution if given two values $1 and $2 aren't equals and displays debug information, usage:
+#   assert_equals <expected> <actual> $LINENO
+assert_equals() { [[ "$1" != "$2" ]] && warn "${LIGHT_RED}assert_equals failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $3, following assertion failed:" && die "'$1' = '$2'"; }
 
 # Checks if given variable is set or not, usage:
 #   is_set <variable_name>
