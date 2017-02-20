@@ -32,6 +32,7 @@ gl_common_set_var_prefix MYAPP_
 * `<PREFIX>NAME` is the name of your script/program/application, used by `assertok`
 * `<PREFIX>VERSION` is the version of your script/program/application, used by `assertok`
 * `<PREFIX>EXEC_<FILE_EXTENSION>` is the path to the program to use when openning file with `file_exec` with given `<FILE_EXTENSION>`
+* `<PREFIX>HELP_FILE` is the Markdown file used when calling `usage`
 * `<PREFIX>HELP_TITLE_PREFIX` is the prefix of title sections to ignore when calling `usage`
 * `<PREFIX>HELP_HEADER` is the text to displays always first when calling `usage`
 
@@ -80,11 +81,6 @@ These variables can be accessed and assigned with these commands, without specif
 * `${TAB}` outputs a tabulation, equivalent to `\t`
 * `${LF}` outputs a line feed, equivalent to `\n`
 
-## Variable manipulation
-
-* `get_var VARIABLE_NAME` gets the value of given variable name in *VARIABLE_NAME*
-* `set_var VARIABLE_NAME VALUE` sets the value of given variable name in *VARIABLE_NAME* with value in *VALUE*
-
 > [Example](examples/colors)
 
 ### shFlags compatibility
@@ -94,12 +90,25 @@ These variables can be accessed and assigned with these commands, without specif
 
 ## Variable manipulation
 
-* `get_var VARIABLE_NAME` gets the value of given variable name in *VARIABLE_NAME*
-* `set_var VARIABLE_NAME VALUE` sets the value of given variable name in *VARIABLE_NAME* with value in *VALUE*
+* `get_var NAME` gets the value of given variable *NAME*
+* `set_var NAME VALUE` sets the value of given variable *NAME* with *VALUE*
 * `init_var NAME COMMAND` checks if variable *NAME* is defined or sets its value to standard output of given *COMMAND* otherwise
 * `init_var NAME COMMAND PREFIX` checks if variable *PREFIXNAME* is defined and sets its value to variable *NAME* or sets value of variable *NAME* to standard output of given *COMMAND* otherwise
+* `is_set NAME` checks if given variable *NAME* is set
+* `is_empty NAME` checks if given variable *NAME* is set and empty
 
 > [Example](examples/variables)
+
+## Assertions
+
+* `assert_ok COMMAND $LINENO` checks if *COMMAND* return code is `0` and displays an error message if not
+* `assert_ko COMMAND $LINENO` checks if *COMMAND* return code is not `0` and displays an error message if not
+* `assert_equals EXPECTED ACTUAL $LINENO` checks if *EXPECTED* value is equals to *ACTUAL* value and displays an error message if not
+* `assert_notequals UNEXPECTED ACTUAL $LINENO` checks if *UNEXPECTED* value is not equals to *ACTUAL* value and displays an error message if not
+
+Note: Commands above use variables *NAME* and *VERSION* when displaying failed assertions.
+
+> [Example](examples/asserts)
 
 ## Pipes
 

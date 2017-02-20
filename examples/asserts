@@ -28,5 +28,6 @@ return_ko() { return 1; }
 assert_ok "return_ok" $LINENO
 assert_ko "return_ko" $LINENO
 assert_equals "1" 1 $LINENO
+assert_notequals 5 $((2 + 2)) $LINENO
 
 end Everything is fine !

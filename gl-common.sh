@@ -210,6 +210,10 @@ assert_ko() { $1 && warn "${LIGHT_RED}assert_ko failed: $(gl_common_get_var NAME
 #   assert_equals <expected> <actual> $LINENO
 assert_equals() { [[ "$1" != "$2" ]] && warn "${LIGHT_RED}assert_equals failed: $(gl_common_get_var NAME) v$(gl_common_get_var VERSION), line $3, assertion failed:" && die "Expected: '$1'\nActual:   '$2'"; }
 
+# Ends the execution if given two values $1 and $2 are equals and displays debug information, usage:
+#   assert_notequals <unexpected> <actual> $LINENO
+assert_notequals() { [[ "$1" = "$2" ]] && warn "${LIGHT_RED}assert_notequals failed: $(gl_common_get_var NAME) v$(gl_common_get_var VERSION), line $3, assertion failed:" && die "Unexpected: '$1'\nActual:     '$2'"; }
+
 # Checks if given variable is set or not, usage:
 #   is_set <variable_name>
 is_set() { return "$([[ -n "$(get_var "$1+x")" ]]; echo "$?";)"; }
