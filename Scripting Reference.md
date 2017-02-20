@@ -109,6 +109,8 @@ These variables can be accessed and assigned with these commands, without specif
 * `echo_piped` echoes the content of previous piped command
 * `echo_piped OPTIONS` echoes the content of previous piped command with given `echo` *OPTIONS*
 
+> [Example](examples/variables)
+
 ## User interactions
 
 * `trace TEXT` displays *TEXT* in dark grey
@@ -180,6 +182,8 @@ Note: *FLAG* in commands above can be formed like:
 
 * `curl_http_code URL` returns the HTTP code for given *URL*
 * `curl_http_code URL OPTIONS` returns the HTTP code for given *URL* and applies given *curl* *OPTIONS*
+
+> [Example](examples/spinner)
 
 ## Script's documentation in Markdown
 
