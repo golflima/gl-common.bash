@@ -204,7 +204,7 @@ assert_ok() { ! $1 && warn "${LIGHT_RED}assert_ok failed: $(echo gl_common_get_v
 
 # Ends the execution if given command $1 doesn't return an error and displays debug information, usage:
 #   assert_ko <command> $LINENO
-assert_ko() { $1 && warn "${LIGHT_RED}assert_ko failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+assert_ko() { $1 && warn "${LIGHT_RED}assert_ko failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command succeed (err: $?):" && die "$1"; }
 
 # Ends the execution if given two values $1 and $2 aren't equals and displays debug information, usage:
 #   assert_equals <expected> <actual> $LINENO
