@@ -29,5 +29,8 @@ trace require_argument arg1 OK
 require_script_file colors
 trace require_script_file colors OK
 
-require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/examples/spinner.sh
-trace require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/examples/spinner.sh OK
+require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/examples/colors
+trace require_script_curl https://raw.githubusercontent.com/golflima/gl-common.bash/master/examples/colors OK
+
+require_command curl
+trace require_command curl OK
