@@ -194,6 +194,10 @@ require_script_curl() {
     [[ "${error_code}" > 0 ]] && die "Error when loading script from '$1', error_code: ${error_code}."
 }
 
+# Ends the execution if given command is not found, usage:
+#   require_command <command>
+require_command() { [[ -z "$(type -t "$@")" ]] && die "Required command '$@' not found."; }
+
 # Ends the execution if given command $1 returns an error and displays debug information, usage:
 #   assertok "command" $LINENO
 assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
