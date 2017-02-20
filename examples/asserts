@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Example for gl-common.bash
+#
+# CC0 - Public Domain, jeremy.walther@golflima.net
+# To the extent possible under law, Jérémy Walther has waived
+# all copyright and related or neighboring rights to this file.
+# This work is published from: France.
+# See: <https://creativecommons.org/publicdomain/zero/1.0/deed>
+#
+# Feel free to use it as you want.
+#
+# This example is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+# Load gl-common.bash
+readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g')")
+. "${EXAMPLE_DIR}/../gl-common.sh" EXAMPLE_
+if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
+
+gl_common_set_var NAME EXAMPLE_VARIABLES
+gl_common_set_var VERSION 1.0
+
+return_ok() { return 0; }
+return_ko() { return 1; }
+
+assert_ok "return_ok" $LINENO
+assert_ko "return_ko" $LINENO
+assert_equals "1" 1 $LINENO
+
+end Everything is fine !
