@@ -20,9 +20,18 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
 set_var FOO BAR
+set_var BAR ''
 trace_var FOO
 trace $(get_var FOO)
 get_var FOO
 echo
 init_var LICENSE "spinner_green 'curl -sL https://www.gnu.org/licenses/lgpl-3.0.txt' | escape_piped"
 grep GNU "${EXAMPLE_DIR}/../LICENSE" <<< "${LICENSE}" | echo_piped -e "Grepped GNU: "
+
+is_set FOO && trace FOO is set
+is_set BAR && trace BAR is set
+is_set NOT_SET && trace NOT_SET is set
+
+is_empty FOO && trace FOO is empty
+is_empty BAR && trace BAR is empty
+is_empty NOT_SET && trace NOT_SET is empty

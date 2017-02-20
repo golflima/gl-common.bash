@@ -199,8 +199,20 @@ require_script_curl() {
 require_command() { [[ -z "$(type -t "$@")" ]] && die "Required command '$@' not found."; }
 
 # Ends the execution if given command $1 returns an error and displays debug information, usage:
-#   assertok "command" $LINENO
-assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+#   assert_ok "command" $LINENO
+assert_ok() { ! $1 && warn "${LIGHT_RED}assert_ok failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+
+# Ends the execution if given command $1 doesn't return an error and displays debug information, usage:
+#   assert_ko "command" $LINENO
+assert_ko() { $1 && warn "${LIGHT_RED}assert_ko failed: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+
+# Checks if given variable is set or not, usage:
+#   is_set <variable_name>
+is_set() { return "$([[ -n "$(get_var "$1+x")" ]]; echo "$?";)"; }
+
+# Checks if given variable is set and empty, usage:
+#   is_empty <variable_name>
+is_empty() { is_set "$1" && return "$([[ -z "$(get_var "$1")" ]]; echo "$?";)" || return 1; }
 
 # Removes all colors, should be called when option --no-color (-c) is used, usage:
 #   remove_colors
