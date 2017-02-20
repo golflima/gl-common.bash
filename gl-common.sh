@@ -29,7 +29,7 @@ GL_COMMON_BASH_PROGRAM_VAR_PREFIX="$1"
 ############## Constants ##############
 
 # Version
-GL_COMMON_BASH_VERSION='0.2.2+170219';
+GL_COMMON_BASH_VERSION='0.2.3+170220';
 
 # Special chars
 # No color
@@ -194,9 +194,33 @@ require_script_curl() {
     [[ "${error_code}" > 0 ]] && die "Error when loading script from '$1', error_code: ${error_code}."
 }
 
+# Ends the execution if given command is not found, usage:
+#   require_command <command>
+require_command() { [[ -z "$(type -t "$@")" ]] && die "Required command '$@' not found."; }
+
 # Ends the execution if given command $1 returns an error and displays debug information, usage:
-#   assertok "command" $LINENO
-assertok() { ! $1 && warn "${LIGHT_RED}fatal: $(echo gl_common_get_var NAME) v$(echo gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+#   assert_ok <command> $LINENO
+assert_ok() { ! $1 && warn "${LIGHT_RED}assert_ok failed: $(gl_common_get_var NAME) v$(gl_common_get_var VERSION), line $2, following command failed (err: $?):" && die "$1"; }
+
+# Ends the execution if given command $1 doesn't return an error and displays debug information, usage:
+#   assert_ko <command> $LINENO
+assert_ko() { $1 && warn "${LIGHT_RED}assert_ko failed: $(gl_common_get_var NAME) v$(gl_common_get_var VERSION), line $2, following command succeed (err: $?):" && die "$1"; }
+
+# Ends the execution if given two values $1 and $2 aren't equals and displays debug information, usage:
+#   assert_equals <expected> <actual> $LINENO
+assert_equals() { [[ "$1" != "$2" ]] && warn "${LIGHT_RED}assert_equals failed: $(gl_common_get_var NAME) v$(gl_common_get_var VERSION), line $3, assertion failed:" && die "Expected: '$1'\nActual:   '$2'"; }
+
+# Ends the execution if given two values $1 and $2 are equals and displays debug information, usage:
+#   assert_notequals <unexpected> <actual> $LINENO
+assert_notequals() { [[ "$1" = "$2" ]] && warn "${LIGHT_RED}assert_notequals failed: $(gl_common_get_var NAME) v$(gl_common_get_var VERSION), line $3, assertion failed:" && die "Unexpected: '$1'\nActual:     '$2'"; }
+
+# Checks if given variable is set or not, usage:
+#   is_set <variable_name>
+is_set() { return "$([[ -n "$(get_var "$1+x")" ]]; echo "$?";)"; }
+
+# Checks if given variable is set and empty, usage:
+#   is_empty <variable_name>
+is_empty() { is_set "$1" && return "$([[ -z "$(get_var "$1")" ]]; echo "$?";)" || return 1; }
 
 # Removes all colors, should be called when option --no-color (-c) is used, usage:
 #   remove_colors

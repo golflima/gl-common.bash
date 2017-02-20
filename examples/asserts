@@ -19,19 +19,15 @@ readonly EXAMPLE_DIR=$(dirname "$(echo "$(readlink -f "$0")" | sed -e 's,\\,/,g'
 . "${EXAMPLE_DIR}/../gl-common.sh" EXAMPLE_
 if [[ $? > 0 ]]; then echo "Error when loading file '${EXAMPLE_DIR}/../gl-common.sh'"; exit 1; fi
 
-set_var FOO BAR
-set_var BAR ''
-trace_var FOO
-trace $(get_var FOO)
-get_var FOO
-echo
-init_var LICENSE "spinner_green 'curl -sL https://www.gnu.org/licenses/lgpl-3.0.txt' | escape_piped"
-grep GNU "${EXAMPLE_DIR}/../LICENSE" <<< "${LICENSE}" | echo_piped -e "Grepped GNU: "
+gl_common_set_var NAME EXAMPLE_VARIABLES
+gl_common_set_var VERSION 1.0
 
-is_set FOO && trace FOO is set
-is_set BAR && trace BAR is set
-is_set NOT_SET && trace NOT_SET is set
+return_ok() { return 0; }
+return_ko() { return 1; }
 
-is_empty FOO && trace FOO is empty
-is_empty BAR && trace BAR is empty
-is_empty NOT_SET && trace NOT_SET is empty
+assert_ok "return_ok" $LINENO
+assert_ko "return_ko" $LINENO
+assert_equals "1" 1 $LINENO
+assert_notequals 5 $((2 + 2)) $LINENO
+
+end Everything is fine !
